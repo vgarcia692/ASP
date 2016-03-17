@@ -45,7 +45,7 @@ class Logs_model extends CI_Model {
         date_default_timezone_set('Pacific/Majuro');
         $insertData['checkIn'] = date('Y-m-d H:i');
 
-        $this->db->insert('lab_logs', $insertData);
+        $this->db->insert('LabLogs', $insertData);
 
         $this->db->trans_complete();
 
@@ -62,18 +62,23 @@ class Logs_model extends CI_Model {
 
         $this->db->where('id', $id);
         $this->db->set('checkOut', $now);
-        $query = $this->db->update('lab_logs');
+        $query = $this->db->update('LabLogs');
         print_r($this->db->affected_rows());
     }
 
-    public function get_all_logs() {
+    public function logs_record_count() {
+        return $this->db->count_all("LabLogs");
+    }
+
+    public function get_all_logs($limit, $start) {
         $this->db->select('ll.id,l.name as labName,ll.checkIn,ll.checkOut,ll.userType,ll.name,s.studNo,s.name as studentName,c.course,p.purpose');
+        $this->db->limit($limit, $start);
         $this->db->order_by('ll.checkIn', 'DESC');
         $this->db->join('labs l', 'l.id = ll.LabId', 'left');
         $this->db->join('students s', 's.id = ll.StudentId', 'left');
         $this->db->join('courses c', 'c.id = ll.CourseId', 'left');
         $this->db->join('purposes p', 'p.id = ll.PurposeId', 'left');
-        $result = $this->db->get('lab_logs ll');
+        $result = $this->db->get('LabLogs ll');
 
         return $result->result_array();
     
@@ -93,7 +98,7 @@ class Logs_model extends CI_Model {
             $this->db->where('s.studNo', $data['studNo']);
         }            
         
-        $result = $this->db->get('lab_logs ll');
+        $result = $this->db->get('LabLogs ll');
     
         return $result->result_array();
 
@@ -108,7 +113,7 @@ class Logs_model extends CI_Model {
         $this->db->join('purposes p', 'p.id = ll.PurposeId', 'left');
         $this->db->where('ll.id', $logId);         
         
-        $result = $this->db->get('lab_logs ll');
+        $result = $this->db->get('LabLogs ll');
     
         return $result->row_array();
     } 
@@ -146,7 +151,7 @@ class Logs_model extends CI_Model {
         $insertData['CourseId'] = $data['courseId'];
 
         $this->db->where('id', $data['id']);
-        return $this->db->update('lab_logs',$insertData);
+        return $this->db->update('LabLogs',$insertData);
     }
 
     public function upload_logs($data) {
@@ -203,7 +208,7 @@ class Logs_model extends CI_Model {
             return FALSE;
         } else {
             foreach ($insertData as $value) {
-                $this->db->insert('lab_logs', $value);
+                $this->db->insert('LabLogs', $value);
             }
             return TRUE;
         }

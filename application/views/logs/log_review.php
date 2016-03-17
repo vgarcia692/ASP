@@ -2,7 +2,7 @@
     <div class="row">
         <div class="col-md-10 col-md-offset-1">
         <h4 class="errorlabel"><?php if (isset($_SESSION['error'])) {echo $_SESSION['error'];} ?></h4>
-            <form action="" method="POST" class="form-inline" role="form">
+            <!-- <form action="" method="POST" class="form-inline" role="form">
                 <div class="form-group">
                     <label for="lab">Lab</label>
                     <select id="lab" name="lab">
@@ -18,7 +18,7 @@
                 </div>
 
                 <button type="submit" name="submitLogReviewCriteria" class="btn btn-primary">Submit</button>
-            </form>
+            </form> -->
         </div>
         <div class="col-md-10 col-md-offset-1">
             <table class="table table-striped table-hover">
@@ -36,7 +36,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <?php $i = 1; ?>
+                   <?php $i = $page + 1; ?>
                     <?php foreach ($logs as $value) { ?>
                         <tr>
                             <td><?php echo $i++; ?></td>
@@ -53,6 +53,8 @@
                         
                 </tbody>
             </table>
+            <!-- Pagination Links -->
+            <?php print_r($pagnation_links); ?>
         </div>
     </div>
 </div>

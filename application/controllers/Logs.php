@@ -10,6 +10,8 @@ class Logs extends CI_Controller {
         $this->load->model('labs_model');
         $this->load->model('students_model');
         $this->load->library('form_validation');
+        $this->load->library('pagination');
+        $this->load->helper('url');
     }
 
     public function allLogs() {
@@ -17,35 +19,46 @@ class Logs extends CI_Controller {
             redirect('/');
         }
 
-        if (!isset($_POST['submitLogReviewCriteria'])) {
+        // PAGINATION CONFIG
+        $pagConfig['base_url'] = base_url('logs/allLogs');
+        $pagConfig['total_rows'] = $this->logs_model->logs_record_count();   
+        $pagConfig['per_page'] = 20;   
+        $this->pagination->initialize($pagConfig);
+        $data['pagnation_links'] = $this->pagination->create_links();
+
+        // WORK ON ADDING FILTERING OPTION
+        // if (!isset($_POST['submitLogReviewCriteria'])) {
             
             // GET ALL LOGS
-            $data['logs'] = $this->logs_model->get_all_logs();
-        } else {
-            if($this->input->post('studentId')!== '') {
-                $this->form_validation->set_rules('studentId', 'Student ID', 'callback_validate_student');
-                $this->form_validation->set_message('validate_student', 'Student Not Found.');
+            $data['page'] = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
+            $data['logs'] = $this->logs_model->get_all_logs($pagConfig['per_page'],$data['page']);
+        // } else {
+        //     if($this->input->post('studentId')!== '') {
+        //         $this->form_validation->set_rules('studentId', 'Student ID', 'callback_validate_student');
+        //         $this->form_validation->set_message('validate_student', 'Student Not Found.');
 
-                if ($this->form_validation->run() == FALSE) {
-                    $this->session->set_flashdata('error', validation_errors());
-                    redirect(base_url('logs/allLogs'));
-                }
-            }
+        //         if ($this->form_validation->run() == FALSE) {
+        //             $this->session->set_flashdata('error', validation_errors());
+        //             redirect(base_url('logs/allLogs'));
+        //         }
+        //     }
             
 
-            $whereData = array(
-                'lab' => $this->input->post('lab'),
-                'studNo' => $this->input->post('studentId')
-            );
+        //     $whereData = array(
+        //         'lab' => $this->input->post('lab'),
+        //         'studNo' => $this->input->post('studentId')
+        //     );
+        //     $data['page'] = 0;
+        //     $data['logs'] = $this->logs_model->get_all_logs_where($whereData);
 
-            $data['logs'] = $this->logs_model->get_all_logs_where($whereData);
-        }
-        
+        // }
+
         // GET ALL LAB NAMES WITH ID
             $data['labs'] = $this->labs_model->get_all_labs();
                 // ADD A BLANK OPTION FOR THE DROPDOWN LIST
-            array_unshift($data['labs'], array('id'=>NULL,'name'=>''));
+                array_unshift($data['labs'], array('id'=>NULL,'name'=>''));
         
+
         $this->load->view('templates/header');
         $this->load->view('templates/navigation');
         $this->load->view('logs/log_review', $data);

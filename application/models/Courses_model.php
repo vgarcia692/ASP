@@ -9,23 +9,23 @@ class Courses_model extends CI_Model {
         $this->load->database();
     }
 
-    public function get_all_courses() {
+    public function get_all_Courses() {
         $this->db->select('id,course as name');
-        $query = $this->db->get('courses');
+        $query = $this->db->get('Courses');
         return $query->result_array();
     }
 
     public function get_course($id) {
         $this->db->select('id,course as name');
         $this->db->where('id', $id);
-        $query = $this->db->get('courses');
+        $query = $this->db->get('Courses');
         return $query->row_array();
     }
 
     public function update_course($data) {
         $this->db->set('course', $data['name']);
         $this->db->where('id', $data['id']);
-        $query = $this->db->update('courses');
+        $query = $this->db->update('Courses');
         return $this->db->affected_rows();
     }
 
@@ -34,11 +34,11 @@ class Courses_model extends CI_Model {
             'course' => $data['name']
         );
     
-        return $this->db->insert('courses',$insertData);
+        return $this->db->insert('Courses',$insertData);
     }
 
     public function delete_course($id) {
-        return $this->db->delete('courses',array('id' => $id));
+        return $this->db->delete('Courses',array('id' => $id));
     }
 
 }

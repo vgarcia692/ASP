@@ -11,21 +11,21 @@ class Purposes_model extends CI_Model {
 
     public function get_all_purposes() {
         $this->db->select('id,purpose as name');
-        $query = $this->db->get('purposes');
+        $query = $this->db->get('Purposes');
         return $query->result_array();
     }
 
     public function get_purpose($id) {
         $this->db->select('id,purpose as name');
         $this->db->where('id', $id);
-        $query = $this->db->get('purposes');
+        $query = $this->db->get('Purposes');
         return $query->row_array();
     }
 
     public function update_purpose($data) {
         $this->db->set('purpose', $data['name']);
         $this->db->where('id', $data['id']);
-        $query = $this->db->update('purposes');
+        $query = $this->db->update('Purposes');
         return $this->db->affected_rows();
     }
 
@@ -34,11 +34,11 @@ class Purposes_model extends CI_Model {
             'purpose' => $data['name']
         );
     
-        return $this->db->insert('purposes',$insertData);
+        return $this->db->insert('Purposes',$insertData);
     }
 
     public function delete_purpose($id) {
-        return $this->db->delete('purposes',array('id' => $id));
+        return $this->db->delete('Purposes',array('id' => $id));
     }
 
 }

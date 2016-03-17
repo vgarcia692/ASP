@@ -11,9 +11,9 @@ class Upload extends CI_Controller {
     }
 
     public function uploadForm() {
-        if ($this->session->userType!=='admin') {
-            redirect('/');
-        }
+        // if ($this->session->userType!=='admin') {
+        //     redirect('/');
+        // }
 
         $this->load->view('templates/header');
         $this->load->view('templates/navigation');

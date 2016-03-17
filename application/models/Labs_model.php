@@ -10,7 +10,7 @@ class Labs_model extends CI_Model {
     }
 
     public function get_all_labs() {
-        $query = $this->db->get('labs');
+        $query = $this->db->get('Labs');
         return $query->result_array();
     }
 
@@ -29,7 +29,7 @@ class Labs_model extends CI_Model {
     public function get_lab($labId) {
         $this->db->select('id,name,capacity');
         $this->db->where('id',$labId);
-        $query = $this->db->get('labs');
+        $query = $this->db->get('Labs');
         return $query->row_array();
     }
 
@@ -41,7 +41,7 @@ class Labs_model extends CI_Model {
 
     // GET CHECKINS IN PARTICULAR LAB
     public function get_all_lab_checkins($labId) {
-        $query = "SELECT l.id, l.checkIn, s.name, CONCAT(l.name, '-',l.userType) as nonStudent FROM lab_logs l LEFT JOIN students s ON s.id = l.StudentId WHERE l.checkIn IS NOT NULL AND l.checkOut IS NULL AND l.LabId=".$labId;
+        $query = "SELECT l.id, l.checkIn, s.name, CONCAT(l.name, '-',l.userType) as nonStudent FROM LabLogs l LEFT JOIN students s ON s.id = l.StudentId WHERE l.checkIn IS NOT NULL AND l.checkOut IS NULL AND l.LabId=".$labId;
         $result = $this->db->query($query);
         return $result->result_array();
     }
@@ -49,7 +49,7 @@ class Labs_model extends CI_Model {
     public function update_lab($data) {
         $this->db->set('name', $data['name']);
         $this->db->where('id', $data['id']);
-        $query = $this->db->update('labs');
+        $query = $this->db->update('Labs');
         return $this->db->affected_rows();
     }
 
@@ -58,11 +58,11 @@ class Labs_model extends CI_Model {
             'name' => $data['name']
         );
     
-        return $this->db->insert('labs',$insertData);
+        return $this->db->insert('Labs',$insertData);
     }
 
     public function delete_lab($id) {
-        return $this->db->delete('labs',array('id' => $id));
+        return $this->db->delete('Labs',array('id' => $id));
     }
 
 }

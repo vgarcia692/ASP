@@ -10,13 +10,13 @@ class Auth_model extends CI_Model {
     }
 
     public function insertNewUser($data) {
-        return $this->db->insert('users', $data);
+        return $this->db->insert('Users', $data);
     }
 
     public function loginUser($data) {
         $this->db->select('id,username,user_type,password');
         $this->db->where('username', $data['username']);
-        $query = $this->db->get('users');
+        $query = $this->db->get('Users');
         $result = $query->row_array();
 
         if ($result) {
