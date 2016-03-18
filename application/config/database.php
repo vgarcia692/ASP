@@ -70,10 +70,10 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 | The $query_builder variables lets you determine whether or not to load
 | the query builder class.
 */
-if ($_SERVER['CI_ENV']=='development') {
+if (ENVIRONMENT=='development') {
     $active_group = 'default';
 }
-elseif ($_SERVER['CI_ENV']=='testing') {
+elseif (ENVIRONMENT=='testing') {
     $active_group = 'testing';
 } else {
     $active_group = 'production';

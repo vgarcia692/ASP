@@ -17,7 +17,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 | environments.
 |
 */
-if ($_SERVER['CI_ENV']=='development') {
+if (ENVIRONMENT=='development') {
     $config['base_url'] = 'http://localhost/CMI/ASP/';
 } else {
     $config['base_url'] = 'http://www.cmi.edu/ASP/';
