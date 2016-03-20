@@ -81,12 +81,12 @@ elseif (ENVIRONMENT=='testing') {
 $query_builder = TRUE;
 
 $db['default'] = array(
-	'dsn'	=> '',
-	'hostname' => 'localhost',
+	'dsn'	=> 'mysql:host=localhost;dbname=asp',
+	//'hostname' => 'localhost',
 	'username' => 'root',
 	'password' => '',
 	'database' => 'asp',
-	'dbdriver' => 'mysqli',
+	'dbdriver' => 'pdo',
 	'dbprefix' => '',
 	'pconnect' => FALSE,
 	'db_debug' => (ENVIRONMENT !== 'production'),
@@ -103,12 +103,12 @@ $db['default'] = array(
 );
 
 $db['testing'] = array(
-    'dsn'   => '',
-    'hostname' => 'localhost',
-    'username' => 'cmiedu_admin',
-    'password' => 'admin',
+    'dsn'   => 'mysql:host=localhost;dbname=cmiedu_asp',
+    //'hostname' => 'localhost',
+    'username' => 'cmiedu',
+    'password' => 'Rmi96960!',
     'database' => 'cmiedu_asp',
-    'dbdriver' => 'mysqli',
+    'dbdriver' => 'pdo',
     'dbprefix' => '',
     'pconnect' => FALSE,
     'db_debug' => (ENVIRONMENT !== 'production'),
@@ -125,12 +125,12 @@ $db['testing'] = array(
 );
 
 $db['production'] = array(
-    'dsn'   => '',
-    'hostname' => 'localhost',
-    'username' => 'cmiedu_admin',
-    'password' => 'admin',
-    'database' => 'cmiedu_asp',
-    'dbdriver' => 'mysqli',
+    'dsn'   => 'mysql:host=localhost;dbname=cmiedu_asp',
+    //'hostname' => 'localhost',
+    'username' => 'cmiedu',
+    'password' => 'Rmi96960!',
+    'database' => 'asp',
+    'dbdriver' => 'pdo',
     'dbprefix' => '',
     'pconnect' => FALSE,
     'db_debug' => (ENVIRONMENT !== 'production'),
