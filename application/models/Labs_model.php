@@ -16,7 +16,7 @@ class Labs_model extends CI_Model {
 
     public function get_all_purposes() {
         $this->db->select('id,purpose');
-        $query = $this->db->get('purposes');
+        $query = $this->db->get('Purposes');
         return $query->result_array();
     }
 
@@ -35,13 +35,13 @@ class Labs_model extends CI_Model {
 
     public function validate_purpose($name) {
         $this->db->where('purpose', $name);
-        $query = $this->db->get('purposes');
+        $query = $this->db->get('Purposes');
         return $query->num_rows();
     }
 
     // GET CHECKINS IN PARTICULAR LAB
     public function get_all_lab_checkins($labId) {
-        $query = "SELECT l.id, l.checkIn, s.name, CONCAT(l.name, '-',l.userType) as nonStudent FROM LabLogs l LEFT JOIN students s ON s.id = l.StudentId WHERE l.checkIn IS NOT NULL AND l.checkOut IS NULL AND l.LabId=".$labId;
+        $query = "SELECT l.id, l.checkIn, s.name, CONCAT(l.name, '-',l.userType) as nonStudent FROM LabLogs l LEFT JOIN Students s ON s.id = l.StudentId WHERE l.checkIn IS NOT NULL AND l.checkOut IS NULL AND l.LabId=".$labId;
         $result = $this->db->query($query);
         return $result->result_array();
     }

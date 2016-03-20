@@ -74,10 +74,10 @@ class Logs_model extends CI_Model {
         $this->db->select('ll.id,l.name as labName,ll.checkIn,ll.checkOut,ll.userType,ll.name,s.studNo,s.name as studentName,c.course,p.purpose');
         $this->db->limit($limit, $start);
         $this->db->order_by('ll.checkIn', 'DESC');
-        $this->db->join('labs l', 'l.id = ll.LabId', 'left');
-        $this->db->join('students s', 's.id = ll.StudentId', 'left');
-        $this->db->join('courses c', 'c.id = ll.CourseId', 'left');
-        $this->db->join('purposes p', 'p.id = ll.PurposeId', 'left');
+        $this->db->join('Labs l', 'l.id = ll.LabId', 'left');
+        $this->db->join('Students s', 's.id = ll.StudentId', 'left');
+        $this->db->join('Courses c', 'c.id = ll.CourseId', 'left');
+        $this->db->join('Purposes p', 'p.id = ll.PurposeId', 'left');
         $result = $this->db->get('LabLogs ll');
 
         return $result->result_array();
@@ -87,10 +87,10 @@ class Logs_model extends CI_Model {
     public function get_all_logs_where($data) {
         $this->db->select('ll.id,l.name as labName,ll.checkIn,ll.checkOut,ll.userType,ll.name,s.studNo,s.name as studentName,c.course,p.purpose');
         $this->db->order_by('ll.checkIn', 'DESC');
-        $this->db->join('labs l', 'l.id = ll.LabId', 'left');
-        $this->db->join('students s', 's.id = ll.StudentId', 'left');
-        $this->db->join('courses c', 'c.id = ll.CourseId', 'left');
-        $this->db->join('purposes p', 'p.id = ll.PurposeId', 'left');
+        $this->db->join('Labs l', 'l.id = ll.LabId', 'left');
+        $this->db->join('Students s', 's.id = ll.StudentId', 'left');
+        $this->db->join('Courses c', 'c.id = ll.CourseId', 'left');
+        $this->db->join('Purposes p', 'p.id = ll.PurposeId', 'left');
         if($data['lab']!=='') {
             $this->db->where('ll.LabId', $data['lab']);
         }
@@ -107,10 +107,10 @@ class Logs_model extends CI_Model {
     public function get_log($logId) {
         $this->db->select('ll.id,l.name as labName,ll.checkIn,ll.checkOut,ll.userType,ll.name,s.studNo,s.name as studentName,c.course,p.purpose,ll.purposeDetail');
         $this->db->order_by('ll.checkIn', 'DESC');
-        $this->db->join('labs l', 'l.id = ll.LabId', 'left');
-        $this->db->join('students s', 's.id = ll.StudentId', 'left');
-        $this->db->join('courses c', 'c.id = ll.CourseId', 'left');
-        $this->db->join('purposes p', 'p.id = ll.PurposeId', 'left');
+        $this->db->join('Labs l', 'l.id = ll.LabId', 'left');
+        $this->db->join('Students s', 's.id = ll.StudentId', 'left');
+        $this->db->join('Courses c', 'c.id = ll.CourseId', 'left');
+        $this->db->join('Purposes p', 'p.id = ll.PurposeId', 'left');
         $this->db->where('ll.id', $logId);         
         
         $result = $this->db->get('LabLogs ll');
@@ -131,14 +131,14 @@ class Logs_model extends CI_Model {
         // GET PURPOSE ID
         $this->db->select('id');
         $this->db->where('purpose', $data['purpose']);
-        $query = $this->db->get('purposes');
+        $query = $this->db->get('Purposes');
         $purpose = $query->row_array();
         $insertData['PurposeId'] = $purpose['id'];
 
         // GET LAB ID
         $this->db->select('id');
         $this->db->where('name', $data['lab']);
-        $query = $this->db->get('labs');
+        $query = $this->db->get('Labs');
         $lab = $query->row_array();
         $insertData['LabId'] = $lab['id'];
 
@@ -163,28 +163,28 @@ class Logs_model extends CI_Model {
             // FIND ID FOR STUDENT
             $this->db->select('id');
             $this->db->where('studNo', $value[5]);
-            $query = $this->db->get('students');
+            $query = $this->db->get('Students');
             $student = $query->row_array();
             $StudentId = $student['id'];
 
             // GET COURSE ID
             $this->db->select('id');
             $this->db->where('course', $value[6]);
-            $query = $this->db->get('courses');
+            $query = $this->db->get('Courses');
             $course = $query->row_array();
             $CourseId = $course['id'];
 
             // GET PURPOSE ID
             $this->db->select('id');
             $this->db->where('purpose', $value[7]);
-            $query = $this->db->get('purposes');
+            $query = $this->db->get('Purposes');
             $purpose = $query->row_array();
             $PurposeId = $purpose['id'];
 
             // GET LAB ID
             $this->db->select('id');
             $this->db->where('name', $value[8]);
-            $query = $this->db->get('labs');
+            $query = $this->db->get('Labs');
             $lab = $query->row_array();
             $LabId = $lab['id'];
 
