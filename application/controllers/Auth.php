@@ -60,7 +60,7 @@ class Auth extends CI_Controller {
     public function processSignup()
     {
         // ADD CLAUSE FOR AN ADMIN VIEW ONLY
-        $this->form_validation->set_rules('username', 'Username', 'required|is_unique[users.username]');
+        $this->form_validation->set_rules('username', 'Username', 'required|is_unique[Users.username]');
         $this->form_validation->set_rules('password', 'Password', 'required');
         $this->form_validation->set_rules('passwordConfirm', 'Password Confirm', 'required|matches[password]');
 

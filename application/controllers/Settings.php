@@ -129,7 +129,7 @@ class Settings extends CI_Controller {
 
     public function proccessAdd() {
         $type = $this->input->post('type');
-        $table = $type.'s';
+        $table = ucfirst($type).'s';
         $nameField = '';
         switch ($type) {
                 case 'lab':
