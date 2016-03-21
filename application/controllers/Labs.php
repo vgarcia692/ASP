@@ -75,7 +75,7 @@ class Labs extends CI_Controller {
         $this->form_validation->set_rules('course', 'Course', 'required');
 
         if ($this->form_validation->run() == FALSE) {
-                $this->processLabSelect($this->input->post('labId'));
+                $this->lab($this->input->post('labId'));
         } else {
 
             $data = array();

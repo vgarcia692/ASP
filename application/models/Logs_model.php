@@ -211,9 +211,6 @@ class Logs_model extends CI_Model {
         }
 
 
-        // echo "<pre>";
-        // print_r($insertData);
-        // echo "</pre>";
         if ($insertData[0]['LabId']=='') {
             return FALSE;
         } else {
