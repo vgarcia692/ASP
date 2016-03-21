@@ -46,7 +46,13 @@
                             <td><?php echo $value['userType']; ?></td>
                             <td><?php echo $value['name']; ?></td>
                             <td><?php echo date_format(date_create($value['checkIn']), 'M d, Y H:i'); ?></td>
-                            <td><?php echo date_format(date_create($value['checkOut']), 'M d, Y H:i'); ?></td>
+                            <td>
+                                <?php if(isset($value['checkOut']) && $value['checkOut']!=='0000-00-00 00:00:00') {
+                                    echo date_format(date_create($value['checkOut']), 'M d, Y H:i');
+                                } else {
+                                    echo "";
+                                } ?>
+                            </td>
                             <td><button type="button" class="btn btn-primary" onclick="edit('<?php echo $value['id']; ?>')">Edit</button>
                         </tr>
                     <?php } ?>

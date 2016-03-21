@@ -73,7 +73,7 @@ class Logs_model extends CI_Model {
     public function get_all_logs($limit, $start) {
         $this->db->select('ll.id,l.name as labName,ll.checkIn,ll.checkOut,ll.userType,ll.name,s.studNo,s.name as studentName,c.course,p.purpose');
         $this->db->limit($limit, $start);
-        $this->db->order_by('ll.checkIn', 'DESC');
+        $this->db->order_by('ll.id', 'DESC');
         $this->db->join('Labs l', 'l.id = ll.LabId', 'left');
         $this->db->join('Students s', 's.id = ll.StudentId', 'left');
         $this->db->join('Courses c', 'c.id = ll.CourseId', 'left');
