@@ -19,14 +19,14 @@ class Logs_model extends CI_Model {
         if(isset($data['studentId'])) { 
         $this->db->select('id');
         $this->db->where('studNo', $data['studentId']);
-        $query = $this->db->get('students');
+        $query = $this->db->get('Students');
         $student = $query->row_array();
         $insertData['StudentId'] = $student['id'];
         }
         // GET PURPOSE ID
         $this->db->select('id');
         $this->db->where('purpose', $data['purpose']);
-        $query = $this->db->get('purposes');
+        $query = $this->db->get('Purposes');
         $purpose = $query->row_array();
         $insertData['PurposeId'] = $purpose['id'];
 
