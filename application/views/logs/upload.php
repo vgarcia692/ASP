@@ -18,7 +18,8 @@
                 <li>LabId</li>
             </ol>
             <li>If the fields are included you must checkoff the "CSV Includes Fields?"</li>
-            <li>For StudentId,Course,Purpose,LabId: They must match exactly as what is used in the system.</li>
+            <li>For StudentId,Course,Purpose,LabId: They must match exactly as what is used in the system. (ex. StudentId that are ssn must include the leading 0, "04123456" not "4123456"</li>
+            <li>Currently, if the student Id did not match to a student in the database, the upload will still upload the log but with a blank studentId. You may check the recent upload at the "Review Logs" in your dashboard.
         </ol>
         <p>You may use the this form as a template on how to use a properly formatted csv file for upload(right click->save as). <a href="<?php echo base_url('assets/images/lab_logs_template.csv'); ?>">Template</a></p>
 

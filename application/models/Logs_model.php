@@ -124,7 +124,7 @@ class Logs_model extends CI_Model {
         // GET STUDENT ID
         $this->db->select('id');
         $this->db->where('studNo', $data['studNo']);
-        $query = $this->db->get('students');
+        $query = $this->db->get('Students');
         $student = $query->row_array();
         $insertData['StudentId'] = $student['id'];
 
@@ -156,9 +156,7 @@ class Logs_model extends CI_Model {
 
     public function upload_logs($data) {
         $insertData = array();
-        // echo "<pre>";
-        // print_r($data);
-        // echo "</pre>";
+
         foreach ($data as $key => $value) {
             // FIND ID FOR STUDENT
             $this->db->select('id');
@@ -188,10 +186,19 @@ class Logs_model extends CI_Model {
             $lab = $query->row_array();
             $LabId = $lab['id'];
 
+            // CHECK TO SEE IF THERE IS A CHECKOUT IN UPLOAD FILE IF NOT ASSIGN BLANK
+            $checkOut = '';
+            if (empty($value[1]) || $value[1]== '') {
+                $checkOut = 'NULL';
+            } else {
+                $checkOut = date_format(date_create($value[1]),'Y-m-d H:i');
+            }
+            
+
             // ADD DATA TO DB FIELDS FOR INSERT
             $insertData[$key] = array(
                 'checkIn' => date_format(date_create($value[0]),'Y-m-d H:i'),
-                'checkOut' => date_format(date_create($value[1]),'Y-m-d H:i'),
+                'checkOut' => $checkOut,
                 'userType' => $value[2],
                 'name' => $value[3],
                 'purposeDetail' => $value[4],
@@ -204,6 +211,9 @@ class Logs_model extends CI_Model {
         }
 
 
+        // echo "<pre>";
+        // print_r($insertData);
+        // echo "</pre>";
         if ($insertData[0]['LabId']=='') {
             return FALSE;
         } else {
@@ -214,9 +224,7 @@ class Logs_model extends CI_Model {
         }
         
         
-        echo "<pre>";
-        print_r($insertData);
-        echo "</pre>";
+        
     }  
 
 }

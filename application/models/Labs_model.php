@@ -22,7 +22,7 @@ class Labs_model extends CI_Model {
 
     public function get_all_courses() {
         $this->db->select('id,course');
-        $query = $this->db->get('courses');
+        $query = $this->db->get('Courses');
         return $query->result_array();
     }
 

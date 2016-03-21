@@ -11,9 +11,6 @@ class Upload extends CI_Controller {
     }
 
     public function uploadForm() {
-        // if ($this->session->userType!=='admin') {
-        //     redirect('/');
-        // }
 
         $this->load->view('templates/header');
         $this->load->view('templates/navigation');
@@ -49,7 +46,7 @@ class Upload extends CI_Controller {
             }
             
         } else {
-            $this->session->set_flashdata('uploadMessage', 'Could not upload CSV file, please check that the file is valid.');
+            $this->session->set_flashdata('uploadMessage', 'Could not upload CSV file, please check that the file is valid. Check to see if field headers are included');
             redirect(base_url('upload/uploadForm'));
         }
         
