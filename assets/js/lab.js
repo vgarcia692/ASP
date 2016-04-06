@@ -3,7 +3,7 @@ $(function(){
     // jQuery methods go here...
     $('#isNotStudent').change(function() {
         if($(this).prop("checked")) {
-            $('#stuId').val('');
+            $('#studentId').val('');
             $('.nonStudent').show('slide',400);
             $('.student').hide('slide',400);
         } else {

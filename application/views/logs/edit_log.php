@@ -31,6 +31,7 @@
                 <div class="form-group">
                     <label for="userType">Non-Student User Type:</label>
                     <select name="userType" id="userType" class="form-control">
+                        <option></option>
                         <option <?php if($log['userType']=='Vistor'){echo "selected";}?>>Visitor</option>
                         <option <?php if($log['userType']=='Faculty'){echo "selected";}?>>Faculty</option>
                         <option <?php if($log['userType']=='Staff'){echo "selected";}?>>Staff</option>

@@ -14,50 +14,37 @@ class Logs extends CI_Controller {
         $this->load->helper('url');
     }
 
-    public function allLogs() {
+    public function logLabs() {
+        $data['labs'] = $this->labs_model->get_all_labs();
+
+        $this->load->view('templates/header');
+        $this->load->view('templates/navigation');
+        $this->load->view('logs/log_labs', $data);
+        $this->load->view('templates/footer');
+    }
+
+    public function allLogs($labId) {
         if (!$this->session->userType=='admin') {
             redirect('/');
         }
 
         // PAGINATION CONFIG
-        $pagConfig['base_url'] = base_url('logs/allLogs');
-        $pagConfig['total_rows'] = $this->logs_model->logs_record_count();   
+        $pagConfig['base_url'] = base_url('logs/allLogs'.'/'.$labId);
+        $pagConfig['total_rows'] = $this->logs_model->logs_record_count($labId);   
         $pagConfig['per_page'] = 20;   
         $this->pagination->initialize($pagConfig);
         $data['pagnation_links'] = $this->pagination->create_links();
-
-        // WORK ON ADDING FILTERING OPTION
-        // if (!isset($_POST['submitLogReviewCriteria'])) {
             
-            // GET ALL LOGS
-            $data['page'] = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
-            $data['logs'] = $this->logs_model->get_all_logs($pagConfig['per_page'],$data['page']);
-        // } else {
-        //     if($this->input->post('studentId')!== '') {
-        //         $this->form_validation->set_rules('studentId', 'Student ID', 'callback_validate_student');
-        //         $this->form_validation->set_message('validate_student', 'Student Not Found.');
-
-        //         if ($this->form_validation->run() == FALSE) {
-        //             $this->session->set_flashdata('error', validation_errors());
-        //             redirect(base_url('logs/allLogs'));
-        //         }
-        //     }
-            
-
-        //     $whereData = array(
-        //         'lab' => $this->input->post('lab'),
-        //         'studNo' => $this->input->post('studentId')
-        //     );
-        //     $data['page'] = 0;
-        //     $data['logs'] = $this->logs_model->get_all_logs_where($whereData);
-
-        // }
+        // GET ALL LOGS
+        $data['page'] = ($this->uri->segment(4)) ? $this->uri->segment(4) : 0;
+        $data['logs'] = $this->logs_model->get_all_logs($pagConfig['per_page'],$data['page'],$labId);
 
         // GET ALL LAB NAMES WITH ID
             $data['labs'] = $this->labs_model->get_all_labs();
                 // ADD A BLANK OPTION FOR THE DROPDOWN LIST
                 array_unshift($data['labs'], array('id'=>NULL,'name'=>''));
         
+        $data['lab'] = $labId;
 
         $this->load->view('templates/header');
         $this->load->view('templates/navigation');
@@ -67,6 +54,7 @@ class Logs extends CI_Controller {
 
     // GO TO CERTAIN LOG FOR EDITING
     public function editLog($logId) {
+
         if (!$this->session->userType) {
             redirect('/');
         }
@@ -80,7 +68,6 @@ class Logs extends CI_Controller {
 
         
         $data['log'] = $this->logs_model->get_log($logId);
-        // $data['log']['checkIn'] = date_format(date_create($data['log']['checkIn']), 'Y-m-d H:i');
         $data['log']['checkIn'] = date_format(date_create($data['log']['checkIn']), "Y-m-d\TH:i");
         if (isset($data['log']['checkOut'])) {
             $data['log']['checkOut'] = date_format(date_create($data['log']['checkOut']), "Y-m-d\TH:i");   
@@ -112,14 +99,18 @@ class Logs extends CI_Controller {
                 'id' => $this->input->post('id'),
                 'checkIn' => $this->input->post('checkIn'),
                 'checkOut' => $this->input->post('checkOut'),
-                'userType' => $this->input->post('userType'),
-                'name' => $this->input->post('name'),
                 'purposeDetail' => $this->input->post('purposeDetail'),
-                'studNo' => $this->input->post('studNo'),
                 'courseId' => $this->input->post('courseId'),
                 'purpose' => $this->input->post('purpose'),
                 'lab' => $this->input->post('lab')
             );
+
+            if (isset($_POST['studNo']) && $_POST['studNo']!= '') {
+                $updateData['studNo'] = $this->input->post('studNo');
+            } else {
+                $updateData['userType'] = $this->input->post('userType');
+                $updateData['name'] = $this->input->post('name');
+            }
 
             
 
@@ -132,9 +123,19 @@ class Logs extends CI_Controller {
                 redirect(base_url('logs/editLog/'.$updateData['id']));
             }
         }
+        
+    }
 
-        
-        
+    public function proccessDeleteLog($logId,$lab) {
+        $result = $this->logs_model->delete_log($logId);
+
+        if ($result) {
+            $this->session->set_flashdata('deleteMessage', 'Successfull Deleted Log');
+            redirect(base_url('logs/allLogs/'.$lab));
+        } else {
+            $this->session->set_flashdata('deleteMessage', 'Failed to Delete Log');
+            redirect(base_url('logs/allLogs/'.$lab));
+        }
     }
 
     // CHECK FOR EXISTING STUDENT BEFORE CHECKING THEM IN

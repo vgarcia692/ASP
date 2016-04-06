@@ -27,9 +27,16 @@
     <div class="row">
         <div class="col-md-10 col-md-offset-1">
             <div class="col-md-3">
-                <a href="<?php echo base_url('logs/allLogs') ?>"><img class="dashboardIcon" src="<?php echo base_url('assets/images/crowd-of-users.svg'); ?>"></a>
+                <a href="<?php echo base_url('logs/logLabs') ?>"><img class="dashboardIcon" src="<?php echo base_url('assets/images/crowd-of-users.svg'); ?>"></a>
                 <h3 class="dashboardText">Review Logs</h3>
             </div>
+            <?php if ($_SESSION['userType']=='admin') { ?>
+                <div class="col-md-3">
+                    <a href="<?php echo base_url('reports/totalVisits'); ?>"><img class="dashboardIcon" src="<?php echo base_url('assets/images/check.svg'); ?>"></a>
+                    <h3 class="dashboardText">Reports</h3>
+                </div>
+            <?php } ?>
         </div>
+        
     </div>
 </div>

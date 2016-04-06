@@ -9,6 +9,7 @@
             <legend>Check In User:</legend>
 
             <input type="number" name="labId" hidden value="<?php echo $labInfo['id']; ?>" />
+            <input type="text" name="labName" hidden value="<?php echo $labInfo['name']; ?>" />
 
             <div class="form-group">
                 <label for="isNotStudent">Not a Student:</label>
@@ -17,7 +18,7 @@
 
             <div class="form-group student">
                 <label for="stuId">Student ID:</label>
-                <input type="text" name="studentId" class="form-control" id="stuId" placeholder="Input Student ID">
+                <input type="text" name="studentId" class="form-control" id="studentId" placeholder="Input Student ID">
             </div>
 
             <div class="form-group nonStudent">
@@ -56,24 +57,33 @@
                 </select>
             </div>
 
-            <button type="" class="btn btn-primary" id="checkIn">Check In</button>
+            <div class="form-group" id="checkInEditInput" style="display: none;">
+                <label for="checkInEdit">Check In:</label>
+                <input class="form-control" type="datetime-local" id="checkInEdit" name="checkInEdit"></input>
+            </div>
+
+            <button class="btn btn-primary" id="checkIn">Check In</button>
+            <button style="display: none;" type="button" class="btn btn-info" id="saveEdit">Save</button>
+            <button style="display: none;" type="button" class="btn btn-danger" id="cancelEdit">Cancel</button>
         </form>
     </div>
     <div class="panel panel-info col-md-offset-1 col-md-6">
     <script type="text/javascript">
         var checkIns = <?php echo $jsonCheckIns; ?>;
         var tr;
+        var userEditId = 0;
+
         $(document).ready(function () {
             for (var i = 0; i < checkIns.length; i++) {
                 tr = $('<tr/>');
                 tr.attr('id',checkIns[i].id);
                 if (checkIns[i].name) {
-                    tr.append("<td>" + checkIns[i].name + "</td>");
+                    tr.append("<td id='name-"+checkIns[i].id+"'>" + checkIns[i].name + "</td>");
                 } else {
-                    tr.append("<td>" + checkIns[i].nonStudent + "</td>");
+                    tr.append("<td id='name-"+checkIns[i].id+"'>" + checkIns[i].nonStudent + "</td>");
                 }
-                tr.append("<td>" + checkIns[i].checkIn + "</td>");
-                tr.append("<td>" + "<button class='btn btn-primary' onclick='checkout("+ checkIns[i].id +")'>Check Out</button>" + "</td>");
+                tr.append("<td id='checkin-"+checkIns[i].id+"'>" + checkIns[i].checkIn + "</td>");
+                tr.append("<td>" + "<button class='btn btn-primary' onclick='checkout("+ checkIns[i].id +")'>Check Out</button>" + " <button class='btn btn-info' onclick='edit("+ checkIns[i].id +")'>Edit</button></td>");
                 $('tbody').append(tr);
             };
         
@@ -91,9 +101,115 @@
                     alert('could not checkout');
                }
             });
-
             
         };
+
+        function edit(id) {
+            $('#saveEdit').show();
+            $('#cancelEdit').show();
+            var url = "<?php echo base_url('labs/getLog/'); ?>/" + id;
+            
+            $.ajax({
+                url: url,
+                dataType: 'json',
+                success: function(json) {
+                    if (json.notStudent == true) {
+                        $('#isNotStudent').prop('checked', true);
+                        $('#stuId').val('');
+                        $('.nonStudent').show('slide',400);
+                        $('.student').hide('slide',400);
+                        $('#user').val(json.userType);
+                        $('#userName').val(json.name);
+                    } else {
+                        $('#isNotStudent').prop('checked', false);
+                        $('#user').val('');
+                        $('#userName').val('');
+                        $('.nonStudent').hide('slide',400);
+                        $('.student').show('slide',400);
+                        $('#studentId').val(json.studNo);
+                    }
+                    $('#checkInEditInput').show('slide',400);
+                    $('#checkInEdit').val(json.checkIn);
+                    $('#purpose').val(json.purpose);
+                    $('#purposeDetail').val(json.purposeDetail);
+                    $('#course').val(json.courseId);
+                    userEditId = json.id;
+                },
+                error: function(a,b,c) {
+                    console.log(a);
+                    console.log(b);
+                    console.log(c);
+                }
+            });
+        };
+
+        $('#saveEdit').click(function() {
+           if(userEditId!=0) {
+                var url = "<?php echo base_url('labs/editLog'); ?>";
+            
+            $.ajax({
+                url: url,
+                type: 'POST',
+                data: $('form').serialize() + '&userEditId=' + userEditId, 
+                dataType: 'json',
+                success: function(json) {
+                    if(json!=false) {
+                        $('#saveEdit').hide();
+                        $('#cancelEdit').hide();
+                        alert('Lab Log Successfully Edited.');
+                        $('#isNotStudent').prop('checked', false);
+                        $('#user').val('');
+                        $('#userName').val('');
+                        $('.nonStudent').hide('slide',400);
+                        $('.student').show('slide',400);
+                        $('#studentId').val('');
+                        $('#purpose').val('');
+                        $('#purposeDetail').val('');
+                        $('#course').val('');
+                        $('#checkInEdit').val('');
+                        $('#checkInEditInput').hide('slide',400);
+                        
+                        var newName = '';
+                        if(json.studNo=='') {
+                            newName =  json.name+'-'+json.userType;
+                        } else {
+                            newName =  json.studentName;
+                        }
+                        
+                        $('#name-'+userEditId).text(newName);
+                        $('#checkin-'+userEditId).text(json.checkIn);
+
+
+                    } else {
+                        alert('Unable to Edit LabLog Please Check Form Inputs.');
+                    }
+                },
+                error: function(a,b,c) {
+                    console.log(a);
+                    console.log(b);
+                    console.log(c);
+                }
+            });
+           }
+        });
+
+        $('#cancelEdit').click(function() { 
+            $('#saveEdit').hide();
+            $('#cancelEdit').hide();
+            $('#isNotStudent').prop('checked', false);
+            $('#user').val('');
+            $('#userName').val('');
+            $('.nonStudent').hide('slide',400);
+            $('.student').show('slide',400);
+            $('#studentId').val('');
+            $('#purpose').val('');
+            $('#purposeDetail').val('');
+            $('#course').val('');
+            $('#checkInEdit').val('');
+            $('#checkInEditInput').hide('slide',400);
+        });
+
+
     </script>
         <legend>Currently Checked In to <?php echo $labInfo['name']; ?>:</legend>
         <table id="checkedInTable" class="table table-hover">

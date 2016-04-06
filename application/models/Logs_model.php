@@ -56,6 +56,7 @@ class Logs_model extends CI_Model {
         }
     }
 
+
     public function checkout_user($id) {
         date_default_timezone_set('Pacific/Majuro');
         $now = date('Y-m-d H:i');
@@ -66,11 +67,12 @@ class Logs_model extends CI_Model {
         print_r($this->db->affected_rows());
     }
 
-    public function logs_record_count() {
+    public function logs_record_count($labId) {
+        $this->db->where('id', $labId);
         return $this->db->count_all("LabLogs");
     }
 
-    public function get_all_logs($limit, $start) {
+    public function get_all_logs($limit, $start, $labId) {
         $this->db->select('ll.id,l.name as labName,ll.checkIn,ll.checkOut,ll.userType,ll.name,s.studNo,s.name as studentName,c.course,p.purpose');
         $this->db->limit($limit, $start);
         $this->db->order_by('ll.id', 'DESC');
@@ -78,6 +80,7 @@ class Logs_model extends CI_Model {
         $this->db->join('Students s', 's.id = ll.StudentId', 'left');
         $this->db->join('Courses c', 'c.id = ll.CourseId', 'left');
         $this->db->join('Purposes p', 'p.id = ll.PurposeId', 'left');
+        $this->db->where('l.id',$labId);
         $result = $this->db->get('LabLogs ll');
 
         return $result->result_array();
@@ -121,12 +124,20 @@ class Logs_model extends CI_Model {
     public function update_log($data) {
         $insertData = array();
 
-        // GET STUDENT ID
-        $this->db->select('id');
-        $this->db->where('studNo', $data['studNo']);
-        $query = $this->db->get('Students');
-        $student = $query->row_array();
-        $insertData['StudentId'] = $student['id'];
+        
+        if(isset($data['studNo'])) {
+            // GET STUDENT ID
+            $this->db->select('id');
+            $this->db->where('studNo', $data['studNo']);
+            $query = $this->db->get('Students');
+            $student = $query->row_array();
+            $insertData['StudentId'] = $student['id'];
+        } else {
+            // USE NAME/USERTYPE
+            $insertData['userType'] = $data['userType'];
+            $insertData['name'] = $data['name'];
+        }
+        
 
         // GET PURPOSE ID
         $this->db->select('id');
@@ -144,9 +155,9 @@ class Logs_model extends CI_Model {
 
         // PREP REST OF INSERT DATA
         $insertData['checkIn'] = $data['checkIn'];
-        $insertData['checkOut'] = $data['checkOut'];
-        $insertData['userType'] = $data['userType'];
-        $insertData['name'] = $data['name'];
+        if(isset($insertData['checkOut'])) {
+            $insertData['checkOut'] = $data['checkOut'];            
+        }
         $insertData['purposeDetail'] = $data['purposeDetail'];
         $insertData['CourseId'] = $data['courseId'];
 
@@ -223,5 +234,16 @@ class Logs_model extends CI_Model {
         
         
     }  
+
+    public function delete_log($id) {
+        return $this->db->delete('LabLogs',array('id' => $id));
+    }
+
+    public function get_total_visits($data) {
+        $this->db->where('LabId', $data['labId']);
+        $this->db->where('checkOut >=', $data['startingDate']);
+        $this->db->where('checkOut <=', $data['endingDate']);
+        return $this->db->count_all("LabLogs");
+    }
 
 }

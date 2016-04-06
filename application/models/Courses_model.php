@@ -22,6 +22,13 @@ class Courses_model extends CI_Model {
         return $query->row_array();
     }
 
+    public function get_course_id_by_name($name) {
+        $this->db->select('id');
+        $this->db->where('course', $name);
+        $query = $this->db->get('Courses');
+        return $query->row_array();
+    }
+
     public function update_course($data) {
         $this->db->set('course', $data['name']);
         $this->db->where('id', $data['id']);

@@ -30,6 +30,13 @@ class Students_model extends CI_Model {
         return $query->row_array();
     }
 
+    public function get_student_by_studNo($studNo) {
+        $this->db->select('id,studNo,name');
+        $this->db->where('studNo', $studNo);
+        $query = $this->db->get('Students');
+        return $query->row_array();
+    }
+
     public function update_student($data) {
         $this->db->set('name', $data['name']);
         $this->db->set('studNo', $data['studNo']);

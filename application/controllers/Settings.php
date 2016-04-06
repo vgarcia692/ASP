@@ -197,10 +197,6 @@ class Settings extends CI_Controller {
             case 'purpose':
                 $data['data'] = $this->purposes_model->get_all_purposes();
                 break;
-            // TAKES TOO LONG TO ADD STUDENTS WILL NEED TO AD PAGINATION
-            // case 'student':
-            //     $data['data'] = $this->students_model->get_all_students();
-            //     break;
         }
 
         $data['type'] = $type; 
