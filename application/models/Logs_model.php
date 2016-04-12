@@ -155,7 +155,7 @@ class Logs_model extends CI_Model {
 
         // PREP REST OF INSERT DATA
         $insertData['checkIn'] = $data['checkIn'];
-        if(isset($insertData['checkOut'])) {
+        if(isset($data['checkOut'])) {
             $insertData['checkOut'] = $data['checkOut'];            
         }
         $insertData['purposeDetail'] = $data['purposeDetail'];
@@ -239,11 +239,16 @@ class Logs_model extends CI_Model {
         return $this->db->delete('LabLogs',array('id' => $id));
     }
 
+    // REPORT TOTAL VISITS
     public function get_total_visits($data) {
+        $this->db->from('LabLogs');
         $this->db->where('LabId', $data['labId']);
         $this->db->where('checkOut >=', $data['startingDate']);
         $this->db->where('checkOut <=', $data['endingDate']);
-        return $this->db->count_all("LabLogs");
+        // $this->db->where('LabId', 1);
+        // $this->db->where('checkOut >=', '2016-03-10');
+        // $this->db->where('checkOut <=', '2016-03-16');
+        return $this->db->count_all_results();
     }
 
 }

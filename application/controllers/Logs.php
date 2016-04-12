@@ -53,7 +53,9 @@ class Logs extends CI_Controller {
     }
 
     // GO TO CERTAIN LOG FOR EDITING
-    public function editLog($logId) {
+    public function editLog($logId,$page) {
+
+        $data['page'] = $page;
 
         if (!$this->session->userType) {
             redirect('/');
@@ -112,12 +114,15 @@ class Logs extends CI_Controller {
                 $updateData['name'] = $this->input->post('name');
             }
 
-            
+            $pageNum = $this->input->post('page');
 
             $result = $this->logs_model->update_log($updateData);
             if($result) {
+                // Get the Lab ID to bring back to original page of allLogs
+                $lab = $this->labs_model->get_lab_id($updateData['lab']);
+
                 $this->session->set_flashdata('labEditMessage','Successfully Updated Lab Log');
-                redirect(base_url('logs/editLog/'.$updateData['id']));
+                redirect(base_url('logs/allLogs/'.$lab['id'].'/'.$pageNum));
             } else {
                 $this->session->set_flashdata('labEditMessage','Unable to Update Lab Log');
                 redirect(base_url('logs/editLog/'.$updateData['id']));

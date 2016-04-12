@@ -33,6 +33,13 @@ class Labs_model extends CI_Model {
         return $query->row_array();
     }
 
+    public function get_lab_id($labName) {
+        $this->db->select('id');
+        $this->db->where('name',$labName);
+        $query = $this->db->get('Labs');
+        return $query->row_array();
+    }
+
     public function validate_purpose($name) {
         $this->db->where('purpose', $name);
         $query = $this->db->get('Purposes');

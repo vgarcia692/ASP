@@ -18,14 +18,17 @@
                         <?php } ?>
                     </select>
                 </div> 
+
+                <p>Find Between These Dates</p>
+                <p>* Make sure the records are within these dates NOT including in these dates.</p>
             
                 <div class="form-group">
-                    <label for="startingDate">Starting Date Range</label>
+                    <label for="startingDate">Starting Date</label>
                     <input type="date" class="form-control" id="startingDate" name="startingDate" placeholder="mm/dd/yyyy" />
                 </div>
 
                 <div class="form-group">
-                    <label for="endingDate">Ending Date Range</label>
+                    <label for="endingDate">Ending Date</label>
                     <input type="date" class="form-control" id="endingDate" name="endingDate" placeholder="mm/dd/yyyy" />
                 </div>
 
@@ -44,6 +47,7 @@
             type: 'POST',
             dataType: 'json',
             success: function(json) {
+                console.log(json);
                 if (json!=false) {
                     $('#visitHeading').show();
                     $('#visitNumber').text(json);

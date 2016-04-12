@@ -8,7 +8,8 @@
             } ?></label></h3>
                 <legend>Edit Log</legend>
                 <input type="number" name="id" hidden value="<?php echo $log['id']; ?>"></input>
-                
+                <input type="number" name="page" hidden value="<?php echo $page; ?>"></input>
+
                 <div class="form-group">
                     <label for="lab">Lab</label>
                     <select class="form-control" id="lab" name="lab">

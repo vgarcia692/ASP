@@ -2,6 +2,7 @@
     <div class="row">
         <div class="col-md-10 col-md-offset-1">
         <h4 class="errorlabel"><?php if (isset($_SESSION['deleteMessage'])) {echo $_SESSION['deleteMessage'];} ?></h4>
+        <h4 class="errorlabel"><?php if (isset($_SESSION['labEditMessage'])) {echo $_SESSION['labEditMessage'];} ?></h4>
         </div>
         <div class="col-md-10 col-md-offset-1">
             <table class="table table-striped table-hover">
@@ -37,7 +38,7 @@
                                 } ?>
                             </td>
                             <td>
-                                <button type="button" class="btn btn-primary" onclick="edit('<?php echo $value['id']; ?>')">Edit</button>
+                                <button type="button" class="btn btn-primary" onclick="edit('<?php echo $value['id']; ?>','<?php echo $page; ?>')">Edit</button>
                                 <button id="btnDelete<?php echo $value['id']; ?>" type="button" class="btn btn-danger" dataId="<?php echo $value['id']; ?>">Delete</button>
                                     <script type="text/javascript">
                                         $('#btnDelete<?php echo $value['id']; ?>').click(function() {
@@ -64,8 +65,9 @@
     </div>
 </div>
 <script type="text/javascript">
-    function edit(logId) {
+    function edit(logId,page) {
+        console.log(page);
         var url = "<?php echo base_url('logs/editLog').'/'; ?>";
-        window.location= url+logId;
+        window.location= url+logId+'/'+page;
     }
 </script>

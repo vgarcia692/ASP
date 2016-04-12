@@ -3,7 +3,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 ?><!DOCTYPE html>
 <html>
 <head>
-    <title>APS</title>
+    <title>ASP</title>
     <link rel="stylesheet" href="<?php echo base_url("assets/css/bootstrap/bootstrap.css"); ?>" />
     <link rel="stylesheet" href="<?php echo base_url("assets/css/style.css"); ?>" />
     <script src="<?php echo base_url("assets/js/jquery-2.2.0.min.js"); ?>"></script>

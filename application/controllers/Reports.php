@@ -30,10 +30,13 @@ class Reports extends CI_Controller {
             die();
         }
 
+        $startDate = $this->input->post('startingDate');
+        $endDate = $this->input->post('endingDate');
+
         $whereData = array(
             'labId' => $this->input->post('lab'),
-            'startingDate' => $this->input->post('startingDate'),
-            'endingDate' => $this->input->post('endingDate')
+            'startingDate' => $startDate,
+            'endingDate' => $endDate
         );
 
         $result = $this->logs_model->get_total_visits($whereData);
